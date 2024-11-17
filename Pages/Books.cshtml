@@ -1,0 +1,163 @@
+@page
+@model BookTracker.Pages.BooksModel
+@{
+    ViewData["Title"] = "My Books";
+}
+
+<h1>Lista książek</h1>
+
+<!-- Przycisk dodawania książki -->
+<button type="button" onclick="document.getElementById('addBookModal').style.display='block'">
+    &#43; Dodaj Książkę
+</button>
+
+<!-- Przycisk eksportu CSV jako mała ikona "pobierz" -->
+<form method="post" asp-page-handler="ExportToCSV" style="display:inline-block; float:right;">
+    <button type="submit" title="Pobierz listę książek" style="background:none; border:none; cursor:pointer; padding:5px;">
+        <i class="fas fa-download" style="font-size: 24px; color: #000;"></i>
+    </button>
+</form>
+
+<!-- Pasek wyszukiwania -->
+<input type="text" id="searchBar" placeholder="Szukaj książek..." onkeyup="filterBooks()">
+
+<!-- Wyszukiwarka Google Books -->
+<div style="margin-top: 20px;">
+    <h2>Wyszukaj książki w Google Books</h2>
+    <form method="post" asp-page-handler="SearchGoogleBooks">
+        <input asp-for="SearchQuery" type="text" placeholder="Wpisz tytuł lub autora..." required />
+        <button type="submit">Szukaj</button>
+    </form>
+</div>
+
+<!-- Wyniki wyszukiwania z Google Books -->
+@if (Model.GoogleBooks != null && Model.GoogleBooks.Count > 0)
+{
+    <h3>Wyniki wyszukiwania Google Books</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Okładka</th>
+                <th>Tytuł</th>
+                <th>Autor</th>
+                <th>Dodaj</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var googleBook in Model.GoogleBooks)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(googleBook.CoverImageUrl))
+                        {
+                            <img src="@googleBook.CoverImageUrl" alt="@googleBook.Title" style="width: 50px; height: auto;" />
+                        }
+                        else
+                        {
+                            <span>Brak okładki</span>
+                        }
+                    </td>
+                    <td>@googleBook.Title</td>
+                    <td>@googleBook.Author</td>
+                    <td>
+                        <form method="post" asp-page-handler="AddGoogleBook">
+                            <input type="hidden" name="title" value="@googleBook.Title" />
+                            <input type="hidden" name="author" value="@googleBook.Author" />
+                            <input type="hidden" name="coverImageUrl" value="@googleBook.CoverImageUrl" />
+                            <button type="submit">Dodaj do listy</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Tabela książek lokalnych -->
+<table>
+    <thead>
+        <tr>
+            <th>Okładka</th>
+            <th onclick="sortTable(0)">Title</th>
+            <th onclick="sortTable(1)">Author</th>
+            <th onclick="sortTable(2)">Status</th>
+            <th onclick="sortTable(3)">Date Added</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var book in Model.Books)
+    {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(book.CoverImageUrl))
+                {
+                    <img src="@book.CoverImageUrl" alt="@book.Title" style="width: 50px; height: auto;" />
+                }
+                else
+                {
+                    <span>Brak okładki</span>
+                }
+            </td>
+            <td>@book.Title</td>
+            <td>@book.Author</td>
+            <td>@book.Status</td>
+            <td>@book.DateAdded.ToString("dd-MM-yyyy")</td>
+            <td>
+                <button onclick="confirmAction('start', '@((BookTracker.Models.Book)book).Title')">Start Reading</button>
+                <button onclick="confirmAction('mark', '@((BookTracker.Models.Book)book).Title')">Mark as Read</button>
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@book.Id" />
+                    <button type="submit" formaction="/Books?handler=Delete" class="delete-book" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?');">X</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                <nav aria-label="Paginacja stron">
+                    <ul class="pagination">
+                        @if (Model.PageNumber > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?pageNumber=@(Model.PageNumber - 1)">Poprzednia</a>
+                            </li>
+                        }
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                                <a class="page-link" href="?pageNumber=@i">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.PageNumber < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?pageNumber=@(Model.PageNumber + 1)">Następna</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<!-- Modal do dodawania książek -->
+<div id="addBookModal" style="display:none; position: fixed; top: 20%; left: 30%; width: 40%; padding: 20px; background-color: #fff; border: 1px solid #ccc; box-shadow: 0px 0px 10px rgba(0,0,0,0.5);">
+    <h2>Dodaj Książkę</h2>
+    <form method="post">
+        <label for="title">Tytuł:</label>
+        <input asp-for="Title" type="text" id="title" name="title" maxlength="100" required /><br/>
+
+        <label for="author">Autor:</label>
+        <input asp-for="Author" type="text" id="author" name="author" maxlength="50" required /><br/>
+
+        <input type="hidden" asp-for="Status" value="To Read" />
+
+        <button type="submit">Dodaj</button>
+        <button type="button" onclick="document.getElementById('addBookModal').style.display='none'">Anuluj</button>
+    </form>
+</div>

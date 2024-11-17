@@ -1,0 +1,190 @@
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 2em;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Animacja dla przycisków */
+button {
+  background-color: #007bff; /* niebieski */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Efekt po najechaniu */
+button:hover {
+  background-color: #0056b3; /* ciemniejszy niebieski */
+  transform: scale(1.05); /* powiększenie przycisku */
+}
+
+/* Animacja dla przycisku usuwania (X) */
+button.delete-book {
+  background-color: #ff4d4d; /* czerwony */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Efekt po najechaniu na przycisk usuwania */
+button.delete-book:hover {
+  background-color: #cc0000; /* ciemniejszy czerwony */
+  transform: scale(1.1); /* lekkie powiększenie */
+}
+
+/* Animacja dla ikony pobierania */
+button .fas.fa-download {
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Efekt po najechaniu na ikonę pobierania */
+button:hover .fas.fa-download {
+  color: #007bff;
+  transform: rotate(20deg); /* obrót ikony */
+}
+
+
+/* Stylizacja ikon przycisków */
+button i {
+  margin-right: 8px;
+}
+
+/* Wprowadzenie większych marginesów dla lepszego wyglądu */
+.container {
+  margin-top: 30px;
+}
+
+/* Stylizacja stopki - tymczasowo ukryta */
+footer {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Stylizacja okna dialogowego dodawania książki */
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  margin: auto;
+}
+
+/* Stylizacja pól tekstowych */
+.modal-content input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Stylizacja przycisków w modalu */
+.modal-content button {
+  padding: 10px 15px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #339af0; /* Domyślnie jaśniejszy niebieski */
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button.delete {
+  background-color: #e63946; /* Czerwony dla przycisku usuwania */
+}
+
+.modal-content button.delete:hover {
+  background-color: #d62828; /* Ciemniejszy czerwony po najechaniu */
+}
+
+.modal-content label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Responsywne style */
+@media (max-width: 600px) {
+  table {
+    font-size: 12px;
+  }
+  button {
+    padding: 8px;
+    font-size: 12px;
+  }
+}

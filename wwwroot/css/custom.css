@@ -1,0 +1,62 @@
+#addBookModal {
+    display: block;
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+#addBookModal h2 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+#addBookModal label {
+    font-size: 1.2rem;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+}
+
+#addBookModal input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#addBookModal button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#addBookModal button:hover {
+    background-color: #0056b3;
+}
+
+/* Stylizacja dla czerwonego przycisku zamykania "X" */
+#addBookModal button.close {
+    background-color: #dc3545; /* Czerwony */
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px; 
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#addBookModal button.close:hover {
+    background-color: #c82333; /* Jaśniejszy czerwony po najechaniu */
+}
